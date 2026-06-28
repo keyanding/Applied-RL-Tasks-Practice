@@ -73,7 +73,7 @@ Under these conditions, "there always exists a stationary and deterministic poli
 The optimal action-value function is defined by the Bellman Optimality Equation:
 
 
-$$`Q^*(s,a) = R(s,a) + \gamma \mathbb{E}_{{s'} \sim P(s,a)} [\max_{{a'} \in A} Q^*({s'}, {a'})]`$$
+$$Q^{* }(s,a) = R(s,a) + \gamma \mathbb{E}_{{s'} \sim P(s,a)} [\max_{{a'} \in A} Q^{* }({s'}, {a'})]$$
 
 
 We define the **Bellman Optimality Operator**, $\mathcal{T}$:
