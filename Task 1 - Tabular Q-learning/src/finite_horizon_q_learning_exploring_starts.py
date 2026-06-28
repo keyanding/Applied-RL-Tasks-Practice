@@ -1,7 +1,6 @@
 import gymnasium as gym
 import numpy as np
 
-
 ACTION_SYMBOLS = {
     0: "←",
     1: "↓",

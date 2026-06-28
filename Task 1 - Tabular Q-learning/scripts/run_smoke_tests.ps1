@@ -1,0 +1,3 @@
+python -m experiments.task1_stationary.experiment_multiseed
+python -m experiments.task1b_finite_horizon.experiment_finite_horizon_episode_sweep
+python -m experiments.task1b_finite_horizon.experiment_exploring_starts

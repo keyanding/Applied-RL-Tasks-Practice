@@ -1,12 +1,11 @@
-import numpy as np
 import gymnasium as gym
+import numpy as np
 
-from finite_horizon_q_learning import (
-    train_finite_horizon_q_learning,
+from src.finite_horizon_dp import compute_finite_horizon_optimal_policy
+from src.finite_horizon_q_learning import (
     ACTION_NAMES,
+    train_finite_horizon_q_learning,
 )
-
-from finite_horizon_dp import compute_finite_horizon_optimal_policy
 
 
 def learned_policy_from_Q(Q, horizon):

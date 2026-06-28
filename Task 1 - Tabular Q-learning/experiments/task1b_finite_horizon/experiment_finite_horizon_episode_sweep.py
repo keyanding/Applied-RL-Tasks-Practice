@@ -1,10 +1,10 @@
 import numpy as np
 
-from finite_horizon_q_learning import (
-    train_finite_horizon_q_learning,
+from eval.eval_finite_horizon import evaluate_finite_horizon_policy
+from src.finite_horizon_q_learning import (
     print_policy_at_time,
+    train_finite_horizon_q_learning,
 )
-from eval_finite_horizon import evaluate_finite_horizon_policy
 
 
 def run_episode_sweep():

@@ -1,7 +1,7 @@
-import numpy as np
 import gymnasium as gym
+import numpy as np
 
-from q_learning import train_q_learning, render_policy
+from src.q_learning import train_q_learning
 
 
 def evaluate(Q, episodes=5000, seed=None):

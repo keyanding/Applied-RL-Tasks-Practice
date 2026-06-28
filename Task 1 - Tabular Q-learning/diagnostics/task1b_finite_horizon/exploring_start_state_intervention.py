@@ -1,8 +1,10 @@
-import numpy as np
 import gymnasium as gym
+import numpy as np
 
-from finite_horizon_q_learning import train_finite_horizon_q_learning
-from finite_horizon_dp import compute_finite_horizon_optimal_policy
+from src.finite_horizon_dp import compute_finite_horizon_optimal_policy
+from src.finite_horizon_q_learning_exploring_starts import (
+    train_finite_horizon_q_learning_exploring_starts,
+)
 
 
 def learned_policy_from_Q(Q, horizon):
@@ -38,36 +40,9 @@ def exact_eval_time_dependent_policy(policy, horizon=100, gamma=1.0):
     return V
 
 
-def replace_time_window(policy_learned, policy_opt, start_t, end_t):
-    """
-    Replace learned policy with DP optimal policy for a time window.
-
-    The window is:
-        start_t <= t < end_t
-
-    Example:
-        replace_time_window(policy_learned, policy_opt, 40, 60)
-        replaces t = 40, 41, ..., 59.
-    """
-    new_policy = policy_learned.copy()
-    new_policy[start_t:end_t, :] = policy_opt[start_t:end_t, :]
-    return new_policy
-
-
-def replace_state_across_all_times(policy_learned, policy_opt, state):
-    """
-    Replace learned actions for one state across all time steps.
-
-    This tests whether one physical state is a major bottleneck.
-    """
-    new_policy = policy_learned.copy()
-    new_policy[:, state] = policy_opt[:, state]
-    return new_policy
-
-
 def replace_states_across_all_times(policy_learned, policy_opt, states):
     """
-    Replace learned actions for several states across all time steps.
+    Replace learned actions for selected physical states across all time steps.
     """
     new_policy = policy_learned.copy()
 
@@ -77,18 +52,29 @@ def replace_states_across_all_times(policy_learned, policy_opt, states):
     return new_policy
 
 
+def replace_time_window(policy_learned, policy_opt, start_t, end_t):
+    """
+    Replace learned policy with optimal policy for a time window.
+    """
+    new_policy = policy_learned.copy()
+    new_policy[start_t:end_t, :] = policy_opt[start_t:end_t, :]
+    return new_policy
+
+
 def main():
     horizon = 100
     seed = 0
-    train_episodes = 300_000
+    train_episodes = 100_000
+    exploring_start_prob = 0.5
 
-    Q_learned, visit_counts = train_finite_horizon_q_learning(
+    Q_learned, visit_counts = train_finite_horizon_q_learning_exploring_starts(
         episodes=train_episodes,
         horizon=horizon,
         alpha0=0.5,
         gamma=1.0,
         epsilon_start=1.0,
         epsilon_end=0.05,
+        exploring_start_prob=exploring_start_prob,
         seed=seed,
     )
 
@@ -109,6 +95,42 @@ def main():
     print(f"Learned value: {baseline:.6f}")
     print(f"Optimal value: {optimal:.6f}")
     print(f"Gap: {optimal - baseline:.6f}")
+
+    print("=" * 80)
+    print("Single / grouped state interventions")
+
+    state_sets = [
+        [0],
+        [2],
+        [8],
+        [0, 2],
+        [0, 8],
+        [2, 8],
+        [0, 2, 8],
+        [0, 2, 8, 4, 9, 13, 14],
+        [0, 1, 2, 4, 8, 9, 10, 13, 14],
+    ]
+
+    for states in state_sets:
+        intervened_policy = replace_states_across_all_times(
+            policy_learned,
+            policy_opt,
+            states,
+        )
+
+        V_intervened = exact_eval_time_dependent_policy(
+            intervened_policy,
+            horizon=horizon,
+        )
+
+        value = V_intervened[0, 0]
+
+        print(
+            f"Replace states={states}: "
+            f"value={value:.6f}, "
+            f"improvement={value - baseline:.6f}, "
+            f"remaining_gap={optimal - value:.6f}"
+        )
 
     print("=" * 80)
     print("Time-window interventions")
@@ -138,63 +160,6 @@ def main():
 
         print(
             f"Replace t={start_t:02d}..{end_t - 1:02d}: "
-            f"value={value:.6f}, "
-            f"improvement={value - baseline:.6f}, "
-            f"remaining_gap={optimal - value:.6f}"
-        )
-
-    print("=" * 80)
-    print("Single-state interventions across all times")
-
-    key_states = [0, 1, 2, 4, 6, 8, 9, 10, 13, 14]
-
-    for state in key_states:
-        intervened_policy = replace_state_across_all_times(
-            policy_learned,
-            policy_opt,
-            state,
-        )
-
-        V_intervened = exact_eval_time_dependent_policy(
-            intervened_policy,
-            horizon=horizon,
-        )
-
-        value = V_intervened[0, 0]
-
-        print(
-            f"Replace state={state:2d} across all t: "
-            f"value={value:.6f}, "
-            f"improvement={value - baseline:.6f}, "
-            f"remaining_gap={optimal - value:.6f}"
-        )
-
-    print("=" * 80)
-    print("State-set interventions across all times")
-
-    state_sets = [
-        [4, 8, 9, 13],
-        [4, 8, 9, 13, 14],
-        [0, 4, 8, 9, 13, 14],
-        [1, 2, 4, 8, 9, 10, 13, 14],
-    ]
-
-    for states in state_sets:
-        intervened_policy = replace_states_across_all_times(
-            policy_learned,
-            policy_opt,
-            states,
-        )
-
-        V_intervened = exact_eval_time_dependent_policy(
-            intervened_policy,
-            horizon=horizon,
-        )
-
-        value = V_intervened[0, 0]
-
-        print(
-            f"Replace states={states}: "
             f"value={value:.6f}, "
             f"improvement={value - baseline:.6f}, "
             f"remaining_gap={optimal - value:.6f}"

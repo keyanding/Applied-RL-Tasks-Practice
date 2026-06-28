@@ -1,8 +1,7 @@
-import numpy as np
 import gymnasium as gym
+import numpy as np
 
-from q_learning import train_q_learning_with_sqrt_decay, render_policy
-
+from src.q_learning import train_q_learning_with_sqrt_decay
 
 ACTION_NAMES = {
     0: "LEFT",

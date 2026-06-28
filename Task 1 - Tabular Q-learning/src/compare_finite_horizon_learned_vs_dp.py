@@ -1,15 +1,18 @@
-import numpy as np
 import gymnasium as gym
+import numpy as np
 
-from finite_horizon_q_learning import (
-    train_finite_horizon_q_learning,
-    print_policy_at_time as print_learned_policy_at_time,
-    ACTION_NAMES,
-)
-
-from finite_horizon_dp import (
+from src.finite_horizon_dp import (
     compute_finite_horizon_optimal_policy,
+)
+from src.finite_horizon_dp import (
     print_policy_at_time as print_optimal_policy_at_time,
+)
+from src.finite_horizon_q_learning import (
+    ACTION_NAMES,
+    train_finite_horizon_q_learning,
+)
+from src.finite_horizon_q_learning import (
+    print_policy_at_time as print_learned_policy_at_time,
 )
 
 

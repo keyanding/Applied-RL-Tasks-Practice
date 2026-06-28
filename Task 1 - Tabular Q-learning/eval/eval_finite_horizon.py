@@ -1,10 +1,10 @@
 import gymnasium as gym
 import numpy as np
 
-from finite_horizon_q_learning import (
-    train_finite_horizon_q_learning,
+from src.finite_horizon_q_learning import (
     greedy_action,
     print_policy_at_time,
+    train_finite_horizon_q_learning,
 )
 
 

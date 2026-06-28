@@ -1,8 +1,7 @@
-import numpy as np
 import gymnasium as gym
+import numpy as np
 
-from q_learning import train_q_learning_with_sqrt_decay, render_policy
-
+from src.q_learning import render_policy, train_q_learning_with_sqrt_decay
 
 ACTION_NAMES = {
     0: "LEFT",
@@ -90,7 +89,7 @@ def main():
     success_rate = evaluate(Q, episodes=5000, seed=1000 + seed)
 
     print("=" * 60)
-    print(f"Sqrt decay inspection")
+    print("Sqrt decay inspection")
     print(f"Episodes: {episodes}")
     print(f"Seed: {seed}")
     print(f"Success rate: {success_rate:.3f}")
