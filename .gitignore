@@ -1,0 +1,16 @@
+__pycache__/
+*.pyc
+.venv/
+venv/
+.env
+.ipynb_checkpoints/
+
+# experiment outputs
+outputs/
+results/
+logs/
+
+# OS / editor
+.DS_Store
+.vscode/
+.idea/
