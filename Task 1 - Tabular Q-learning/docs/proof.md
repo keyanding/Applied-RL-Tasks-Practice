@@ -73,7 +73,7 @@ Under these conditions, "there always exists a stationary and deterministic poli
 The optimal action-value function is defined by the Bellman Optimality Equation:
 
 
-$$Q^*(s,a) = R(s,a) + \gamma \mathbb{E}_{{s'} \sim P(s,a)} [\max_{{a'} \in A} Q^*({s'}, {a'})]$$
+$$`Q^*(s,a) = R(s,a) + \gamma \mathbb{E}_{{s'} \sim P(s,a)} [\max_{{a'} \in A} Q^*({s'}, {a'})]`$$
 
 
 We define the **Bellman Optimality Operator**, $\mathcal{T}$:
@@ -86,17 +86,17 @@ The true optimal $`Q^*`$ is a **fixed point** of this operator, meaning $`\mathc
 
 ### Part 3: Contraction Mapping
 
-To prove convergence to a unique fixed point, we must prove $\mathcal{T}$ is a $\gamma$-contraction mapping under the infinity norm, $`\| Q \|_\infty = \max_{s,a} |Q(s,a)|`$. For any arbitrary $Q_1$ and $Q_2$:
+To prove convergence to a unique fixed point, we must prove $\mathcal{T}$ is a $\gamma$-contraction mapping under the infinity norm, $`\Vert Q \Vert_\infty = \max_{s,a} |Q(s,a)|`$. For any arbitrary $Q_1$ and $Q_2$:
 
 
-$$\| \mathcal{T}Q_1 - \mathcal{T}Q_2 \|_\infty = \max_{s,a} \left| \gamma \sum_{s'} P(s'|s,a) \left( \max_{a'} Q_1(s',a') - \max_{a'} Q_2(s',a') \right) \right|$$
+$$\Vert \mathcal{T}Q_1 - \mathcal{T}Q_2 \Vert_\infty = \max_{s,a} \left| \gamma \sum_{s'} P(s'|s,a) \left( \max_{a'} Q_1(s',a') - \max_{a'} Q_2(s',a') \right) \right|$$
 
 Because $\max_{a'} Q_1 - \max_{a'} Q_2 \le \max_{a'} |Q_1 - Q_2|$, and the transition probabilities sum to 1:
 
 
-$$\| \mathcal{T}Q_1 - \mathcal{T}Q_2 \|_\infty \le \gamma \| Q_1 - Q_2 \|_\infty$$
+$$\Vert \mathcal{T}Q_1 - \mathcal{T}Q_2 \Vert_\infty \le \gamma \Vert Q_1 - Q_2 \Vert_\infty$$
 
-Because $\gamma \in [0,1)$, $\mathcal{T}$ is strictly a contraction mapping. By **Banach's Fixed-Point Theorem**, there is exactly one unique fixed point $`Q^*`$, and applying $`\mathcal{T}$ infinitely many times converges to $Q^*`$.
+Because $\gamma \in [0,1)$, $\mathcal{T}$ is strictly a contraction mapping. By **Banach's Fixed-Point Theorem**, there is exactly one unique fixed point $`Q^*`$, and applying $`\mathcal{T}`$ infinitely many times converges to $`Q^*`$.
 
 ### Part 4: Stochastic Approximation Requirements
 
