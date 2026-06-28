@@ -12,11 +12,11 @@ Before the agent interacts with the environment, estimates must be initialized:
 * Initialize the Q-table, $Q(s,a)$, arbitrarily for all $s \in S$ and $a \in A$ (e.g., setting all to $0$).
 * If the environment has terminal states, initialize $Q(\text{terminal}, \cdot) = 0$.
 * Set hyperparameters:
-* **Learning rate ($\alpha \in (0, 1]$):** Determines how much new information overrides old information.
-* **Discount factor ($\gamma \in [0, 1)$):** Weights the importance of future rewards.
+* **Learning rate ($`\alpha \in (0, 1]`$):** Determines how much new information overrides old information.
+* **Discount factor ($`\gamma \in [0, 1)`$):** Weights the importance of future rewards.
 
 
-* **Exploration rate ($\epsilon \in (0, 1)$):** The probability of taking a random action to explore.
+* **Exploration rate ($`\epsilon \in (0, 1)`$):** The probability of taking a random action to explore.
 
 
 
@@ -26,7 +26,7 @@ For each episode (or continuous trajectory), repeat the following steps:
 
 1. **Observe State:** Observe the current state $s$.
 2. **Choose an Action:** Select an action $a$ using an exploration strategy (e.g., $\epsilon$-greedy):
-* With probability $1 - \epsilon$: **Exploit** ($a = \arg\max_{a'} Q(s, a')$).
+* With probability $1 - \epsilon$: **Exploit** ( $a = \arg\max_{a'} Q(s, a')$ ).
 * With probability $\epsilon$: **Explore** (choose a random action $a \in A$).
 
 
@@ -73,7 +73,8 @@ Under these conditions, "there always exists a stationary and deterministic poli
 The optimal action-value function is defined by the Bellman Optimality Equation:
 
 
-$$Q^*(s,a)=R(s,a)+\gamma\mathbb{E}_{s'\sim P(s,a)}[\max_{a'\in A}Q^*(s',a')]$$
+$$Q^*(s,a) = R(s,a) + \gamma \mathbb{E}_{{s'} \sim P(s,a)} [\max_{{a'} \in A} Q^*({s'}, {a'})]$$
+
 
 We define the **Bellman Optimality Operator**, $\mathcal{T}$:
 
@@ -81,21 +82,21 @@ We define the **Bellman Optimality Operator**, $\mathcal{T}$:
 $$(\mathcal{T}Q)(s,a) = R(s,a) + \gamma \sum_{s' \in S} P(s'|s,a) \max_{a' \in A} Q(s',a')$$
 
 
-The true optimal $Q^*$ is a **fixed point** of this operator, meaning $\mathcal{T}Q^* = Q^*$.
+The true optimal $`Q^*`$ is a **fixed point** of this operator, meaning $`\mathcal{T}Q^* = Q^*`$.
 
 ### Part 3: Contraction Mapping
 
-To prove convergence to a unique fixed point, we must prove $\mathcal{T}$ is a $\gamma$-contraction mapping under the infinity norm, $||Q||_\infty = \max_{s,a} |Q(s,a)|$. For any arbitrary $Q_1$ and $Q_2$:
+To prove convergence to a unique fixed point, we must prove $\mathcal{T}$ is a $\gamma$-contraction mapping under the infinity norm, $`\| Q \|_\infty = \max_{s,a} |Q(s,a)|`$. For any arbitrary $Q_1$ and $Q_2$:
 
 
-$$|| \mathcal{T}Q_1 - \mathcal{T}Q_2 ||_\infty = \max_{s,a} \left| \gamma \sum_{s'} P(s'|s,a) \left( \max_{a'} Q_1(s',a') - \max_{a'} Q_2(s',a') \right) \right|$$
+$$\| \mathcal{T}Q_1 - \mathcal{T}Q_2 \|_\infty = \max_{s,a} \left| \gamma \sum_{s'} P(s'|s,a) \left( \max_{a'} Q_1(s',a') - \max_{a'} Q_2(s',a') \right) \right|$$
 
 Because $\max_{a'} Q_1 - \max_{a'} Q_2 \le \max_{a'} |Q_1 - Q_2|$, and the transition probabilities sum to 1:
 
 
-$$|| \mathcal{T}Q_1 - \mathcal{T}Q_2 ||_\infty \le \gamma || Q_1 - Q_2 ||_\infty$$
+$$\| \mathcal{T}Q_1 - \mathcal{T}Q_2 \|_\infty \le \gamma \| Q_1 - Q_2 \|_\infty$$
 
-Because $\gamma \in [0,1)$, $\mathcal{T}$ is strictly a contraction mapping. By **Banach's Fixed-Point Theorem**, there is exactly one unique fixed point $Q^*$, and applying $\mathcal{T}$ infinitely many times converges to $Q^*$.
+Because $\gamma \in [0,1)$, $\mathcal{T}$ is strictly a contraction mapping. By **Banach's Fixed-Point Theorem**, there is exactly one unique fixed point $`Q^*`$, and applying $`\mathcal{T}$ infinitely many times converges to $Q^*`$.
 
 ### Part 4: Stochastic Approximation Requirements
 
@@ -106,7 +107,7 @@ Because Q-learning samples the environment rather than doing exact dynamic progr
 
 2. **Robbins-Monro Learning Rates:** The learning rate $\alpha_t$ must decay such that $\sum_{t=0}^{\infty} \alpha_t = \infty$ and $\sum_{t=0}^{\infty} \alpha_t^2 < \infty$.
 
-If these hold, the Q-values mathematically converge to $Q^*$, yielding the optimal policy $\pi^*(s) = \arg\max_{a\in A} Q^*(s,a)$.
+If these hold, the Q-values mathematically converge to $`Q^*`$, yielding the optimal policy $`\pi^*(s) = \arg\max_{a\in A} Q^*(s,a)`$.
 
 ---
 
